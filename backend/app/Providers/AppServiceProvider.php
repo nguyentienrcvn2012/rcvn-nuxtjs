@@ -3,19 +3,10 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use CloudCreativity\LaravelJsonApi\LaravelJsonApi;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
-    public function boot()
-    {
-        //
-    }
-
     /**
      * Register any application services.
      *
@@ -24,5 +15,16 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+    }
+
+    /**
+     * Bootstrap any application services.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        LaravelJsonApi::defaultApi('v1');
+        LaravelJsonApi::$validationFailures = true;
     }
 }

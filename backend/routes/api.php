@@ -1,31 +1,30 @@
- <?php
+<?php
 
-Route::post('/register', 'AuthController@register');
-Route::post('/login', 'AuthController@login');
-Route::get('/user', 'AuthController@user');
-Route::post('/logout', 'AuthController@logout');
+use Illuminate\Support\Facades\Route;
+use CloudCreativity\LaravelJsonApi\Facades\JsonApi;
 
-Route::group(['middleware' => 'api', 'prefix' => 'password'], function () {
-	Route::post('create', 'PasswordResetController@create');
-	Route::get('find/{token}', 'PasswordResetController@find');
-	Route::post('reset', 'PasswordResetController@reset');
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
+
+Route::namespace('Api\V1\Auth')->prefix('api/v1')->middleware('json.api')->group(function () {
+    Route::post('/login', 'LoginController');
+    Route::post('/register', 'RegisterController');
+    Route::post('/logout', 'LogoutController')->middleware('auth:api');
+    Route::post('/password-forgot', 'ForgotPasswordController');
+    Route::post('/password-reset', 'ResetPasswordController');
 });
 
-Route::group(['prefix' => 'topics'], function () {
-	Route::post('/', 'TopicController@store')->middleware('auth:api');
-	Route::get('/', 'TopicController@index');
-	Route::get('/{topic}', 'TopicController@show');
-	Route::patch('/{topic}', 'TopicController@update')->middleware('auth:api');
-	Route::delete('/{topic}', 'TopicController@destroy')->middleware('auth:api');
-	// post route groups
-	Route::group(['prefix' => '/{topic}/posts'], function () {
-		Route::get('/{post}', 'PostController@show');
-		Route::post('/', 'PostController@store')->middleware('auth:api');
-		Route::patch('/{post}', 'PostController@update')->middleware('auth:api');
-		Route::delete('/{post}', 'PostController@destroy')->middleware('auth:api');
-		// likes
-		Route::group(['prefix' => '/{post}/likes'], function () {
-			Route::post('/', 'PostLikeController@store')->middleware('auth:api');
-		});
-	});
+JsonApi::register('v1')->middleware('auth:api')->routes(function ($api) {
+    $api->get('me', 'Api\V1\MeController@readProfile');
+    $api->patch('me', 'Api\V1\MeController@updateProfile');
+
+    $api->resource('users');
 });
