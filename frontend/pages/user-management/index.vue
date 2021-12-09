@@ -1,18 +1,5 @@
 <template>
   <div class="container-fluid mt-5">
-    <div class="alert alert-danger">
-      <strong
-        >Add, Edit, Delete features are not functional. This is a PRO feature!
-        Click
-        <a
-          href="https://www.creative-tim.com/live/nuxt-argon-dashboard-pro-laravel"
-          target="_blank"
-          id="pro-feature"
-          >here</a
-        >
-        to see the PRO product.</strong
-      >
-    </div>
     <div>
       <card
         class="no-border-card"
@@ -31,6 +18,7 @@
                 ></span>
                 <span class="btn-inner--text">Add User</span>
               </base-button>
+              
             </div>
           </div>
         </template>

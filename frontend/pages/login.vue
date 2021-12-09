@@ -7,16 +7,8 @@
         <div class="header-body text-center mb-7">
           <div class="text-center" style="margin-bottom: 5px">
             <h1 class="text-white">
-              Log in to Nuxt Argon Dashboard Laravel Live Preview
+              Log in
             </h1>
-            <p class="text-lead text-white">
-              Log in to see how you can go from frontend to fullstack in an
-              instant with an API-based Laravel backend.
-            </p>
-          </div>
-          <div class="text-white">
-            <h3 class="text-white"><strong>You can log in with:</strong></h3>
-            <div>Username <b>admin@jsonapi.com</b> Password <b>secret</b></div>
           </div>
         </div>
       </div>
@@ -41,30 +33,7 @@
       <div class="row justify-content-center">
         <div class="col-lg-5 col-md-7">
           <div class="card bg-secondary border-0 mb-0">
-            <div class="card-header bg-transparent pb-5">
-              <div class="text-muted text-center mt-2 mb-3">
-                <small>Sign in with</small>
-              </div>
-              <div class="btn-wrapper text-center">
-                <a href="#" class="btn btn-neutral btn-icon">
-                  <span class="btn-inner--icon"
-                    ><img src="~/static/img/icons/common/github.svg"
-                  /></span>
-                  <span class="btn-inner--text">Github</span>
-                </a>
-                <a href="#" class="btn btn-neutral btn-icon">
-                  <span class="btn-inner--icon"
-                    ><img src="~/static/img/icons/common/google.svg"
-                  /></span>
-                  <span class="btn-inner--text">Google</span>
-                </a>
-              </div>
-            </div>
             <div class="card-body px-lg-5 py-lg-5">
-              <div class="text-center text-muted mb-4">
-                <small>Or sign in with credentials</small>
-              </div>
-
               <form class="needs-validation" @submit.prevent="handleSubmit()">
                 <base-input
                   alternative
