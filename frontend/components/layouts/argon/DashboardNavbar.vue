@@ -251,7 +251,7 @@
             <h6 class="text-overflow m-0">Welcome!</h6>
           </div>
           <nuxt-link
-            :to="{ name: 'examples-user-profile' }"
+            :to="{ name: 'user-profile' }"
             class="dropdown-item"
           >
             <i class="ni ni-single-02"></i>

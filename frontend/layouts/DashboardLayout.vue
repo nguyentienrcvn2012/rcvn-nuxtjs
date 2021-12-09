@@ -21,6 +21,14 @@
         </sidebar-item>
         <sidebar-item
           :link="{
+            name: 'Order Management',
+            icon: 'ni ni-cart',
+            path: '/order-management',
+          }"
+        >
+        </sidebar-item>
+        <sidebar-item
+          :link="{
             name: 'Icons',
             path: '/components/icons',
             icon: 'ni ni-planet',
