@@ -21,6 +21,14 @@
         </sidebar-item>
         <sidebar-item
           :link="{
+            name: 'Customer Mangement',
+            icon: 'ni ni-single-02',
+            path: '/customer-management',
+          }"
+        >
+        </sidebar-item>
+        <sidebar-item
+          :link="{
             name: 'Order Management',
             icon: 'ni ni-cart',
             path: '/order-management',

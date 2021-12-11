@@ -1,120 +1,27 @@
 <template>
   <div class="container-fluid mt-5">
-    <div>
-      <card
-        class="no-border-card"
-        body-classes="px-0 pb-1"
-        footer-classes="pb-2"
-      >
-        <template slot="header">
-          <div class="row">
-            <div class="col-6">
-              <h3 class="mb-0">Users List</h3>
-            </div>
-            <div class="col-6 text-right">
-              <base-button type="primary" icon size="sm" @click="onProFeature">
-                <span class="btn-inner--icon"
-                  ><i class="fas fa-user-edit"></i
-                ></span>
-                <span class="btn-inner--text">Add User</span>
-              </base-button>
-              
-            </div>
-          </div>
-        </template>
-        <div>
-          <div
-            class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap mb-4"
-          >
-            <el-select
-              class="select-primary pagination-select"
-              v-model="pagination.perPage"
-              placeholder="Per page"
-            >
-              <el-option
-                class="select-primary"
-                v-for="item in pagination.perPageOptions"
-                :key="item"
-                :label="item"
-                :value="item"
-              />
-            </el-select>
-          </div>
-          <el-table
-            class="table-responsive align-items-center table-flush"
-            header-row-class-name="thead-light"
-            :data="users"
-            @sort-change="sortChange"
-          >
-            <el-table-column
-              label="Name"
-              min-width="310px"
-              prop="name"
-              sortable="custom"
-            />
-            <el-table-column
-              label="Email"
-              min-width="310px"
-              prop="email"
-              sortable="custom"
-            />
-            <el-table-column
-              label="Created At"
-              prop="created_at"
-              min-width="140px"
-              sortable="custom"
-            />
-            <el-table-column min-width="180px" align="center">
-              <div class="table-actions">
-                <el-tooltip content="Edit" placement="top">
-                  <a
-                    type="text"
-                    @click="onProFeature"
-                    class="table-action"
-                    data-toggle="tooltip"
-                    style="cursor: pointer"
-                  >
-                    <i class="fas fa-user-edit"></i>
-                  </a>
-                </el-tooltip>
-
-                <el-tooltip content="Delete" placement="top">
-                  <a
-                    type="text"
-                    @click="onProFeature"
-                    class="table-action table-action-delete"
-                    data-toggle="tooltip"
-                    style="cursor: pointer"
-                  >
-                    <i class="fas fa-trash"></i>
-                  </a>
-                </el-tooltip>
-              </div>
-            </el-table-column>
-          </el-table>
-        </div>
-        <div
-          slot="footer"
-          class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
-        >
-          <div class="">
-            <p class="card-category">
-              Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
-
-              <span v-if="selectedRows.length">
-                &nbsp; &nbsp; {{ selectedRows.length }} rows selected
-              </span>
-            </p>
-          </div>
-          <base-pagination
-            class="pagination-no-border"
-            v-model="pagination.currentPage"
-            :per-page="pagination.perPage"
-            :total="total"
-          />
-        </div>
-      </card>
-    </div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="user in users" :key="user.id">
+                <th scope="row">{{user.id}}</th>
+                <td>{{user.name}}</td>
+                <td>{{user.email}}</td>
+                <td>
+                    <nuxt-link :to="{name:'user-management-id', params: {id: user.id}}" type="button" class="btn btn-primary">Edit</nuxt-link>
+                    <button @click="deletePost(user.id)" type="button" class="btn btn-secondary">Delete</button>
+                    <nuxt-link :to="{name: 'user-management-create', params: {id: user.id}}" type="button" class="btn btn-success">Create</nuxt-link>
+                </td>
+            </tr>
+        </tbody>
+    </table>
   </div>
 </template>
 <script>
@@ -148,63 +55,26 @@ export default {
   },
 
   data() {
-    return {
-      selectedRows: [],
-      users: [],
-      sort: "created_at",
-
-      pagination: {
-        perPage: 5,
-        currentPage: 1,
-        perPageOptions: [5, 10, 25, 50],
-      },
-
-      total: 1,
-    };
-  },
-  computed: {
-    from() {
-      return this.pagination.perPage * (this.pagination.currentPage - 1);
-    },
-
-    to() {
-      let highBound = this.from + this.pagination.perPage;
-      if (this.total < highBound) {
-        highBound = this.total;
+      return {
+          users: [],
+          links: []
       }
-      return highBound;
-    },
   },
-
-  created() {
-    this.getList();
+  async asyncData({$axios, params}) {
+      const {data} = await $axios.$get(`/user`)
+      return {users: data}
   },
-
   methods: {
-    getList() {
-      this.users = [
-        {
-          name: "Admin",
-          email: "admin@jsonapi.com",
-          created_at: "2020-01-01",
-        },
-      ];
-    },
-    onProFeature() {
-      this.$notify({
-        type: "danger",
-        message: "This is a PRO feature.",
-      });
-    },
-    sortChange({ prop, order }) {
-      if (order === "descending") {
-        this.sort = `-${prop}`;
-      } else {
-        this.sort = `${prop}`;
-      }
-      this.getList();
-    },
-  },
+      async deletePost(id) {
+        await this.$axios.$post(`/user/delete/${this.$route.params.id}`, {id:id})
+        // redirect
+        await this.$nuxt.refresh()
+    }
+  }
+
+  
+
+  
 };
 </script>
 <style>
