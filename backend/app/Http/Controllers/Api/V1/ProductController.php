@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Api\V1;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use GuzzleHttp\Exception\ClientException;
-use CloudCreativity\LaravelJsonApi\Document\Error\Error;
-use CloudCreativity\LaravelJsonApi\Http\Controllers\JsonApiController;
 use App\Models\Product;
-class ProductController extends JsonApiController
+use App\Http\Resources\ProductResource;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\V1\Auth\ProductRequest;
+class ProductController extends Controller
 {
     /**
      * @param Request $request
@@ -18,67 +18,104 @@ class ProductController extends JsonApiController
     public function index(Request $request)
     {
         $data = Product::get();
-		return CustomerResource::collection($data);
+		return ProductResource::collection($data);
         
     }
 
-    /**
-     * Update the specified resource.
-     * Not named update because it conflicts with JsonApiController update method signature
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updateProfile(Request $request)
-    {
-        $http = new Client(['verify' => false]);
-
-        $headers = $this->parseHeaders($request->header());
-
-        $input = $request->json()->all();
-
-        $input['data']['id'] = (string)auth()->id();
-        $input['data']['type'] = 'users';
-
-        $data = [
-            'headers' => $headers,
-            'json' => $input,
-            'query' => $request->query()
-        ];
-
-        try {
-            $response = $http->patch(route('api:v1:users.update', ['record' => auth()->id()]), $data);
-        } catch (ClientException $e) {
-
-            $errors = json_decode($e->getResponse()->getBody()->getContents(), true)['errors'];
-
-            $errors = collect($errors)->map(function ($error) {
-                return Error::fromArray($error);
-            });
-
-            return $this->reply()->errors($errors);
+    public function getById(Request $request){
+        $params = $request->all();
+        if (empty($params['id']) ) {
+            return response()->json([
+                'status' => false,
+                'mgs' =>'Param id is required'
+            ], 301);
         }
-
-        $responseBody = json_decode((string)$response->getBody(), true);
-        $responseStatus = $response->getStatusCode();
-        $responseHeaders = $this->parseHeaders($response->getHeaders());
-
-        unset($responseHeaders['Transfer-Encoding']);
-
-        return response()->json($responseBody, $responseStatus)->withHeaders($responseHeaders);
+        try {   
+            $data = Product::where('id', $params['id'])->get();
+            return ProductResource::collection($data);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'mgs' => 'false'
+            ], 500);
+        }
     }
 
-    /**
-     * Parse headers to collapse internal arrays
-     * TODO: move to helpers
-     *
-     * @param array $headers
-     * @return array
-     */
-    protected function parseHeaders($headers)
-    {
-        return collect($headers)->map(function ($item) {
-            return $item[0];
-        })->toArray();
+    public function update(ProductRequest $request){
+        $params = $request->all();
+        if (empty($params['id']) ) {
+            return response()->json([
+                'status' => false,
+                'mgs' =>'Param id is required'
+            ], 301);
+        }
+        try {
+            $product = Product::where('id', $params['id'])->get();
+            if (!empty($product)) {
+                Product::where('id',$params['id'])->update([
+                    'productName' => $params['productName'],
+                    'categoryId' => $params['categoryId'],
+                    'price' => $params['price']
+                ]);
+                return response()->json([
+                    'status' => true,
+                    'mgs' => 'update success!'
+                ], 200);
+            }                                   
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'mgs' => 'update false'
+            ], 500);
+        }
     }
+    public function deleteById(Request $request){
+        $params = $request->all();
+        if (empty($params['id']) ) {
+            return response()->json([
+                'status' => false,
+                'mgs' =>'Param id is required'
+            ], 301);
+        }
+        try {
+            if (isset($params['id']) ) {
+                $product = Product::where('id', $params['id'])->delete();
+                return response()->json([
+                    'status' => true,
+                    'mgs' => 'delete success!'
+                ], 200);
+            }
+            return response()->json([
+                'status' => false,
+                'mgs' => 'delete false!'
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'mgs' => 'false'
+            ], 500);
+        }
+    }
+
+    public function create(ProductRequest $request){
+        try {
+            $params = $request->all();
+                Product::create([
+                    'productName' => $params['productName'] ,
+                    'categoryId' => $params['categoryId'],
+                    'price' => $params['price'],
+                    'inventory' => $params['inventory']
+                ]);
+                return response()->json([
+                    'status' => true,
+                    'mgs' => 'create success!'
+                ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'status' => false,
+                'mgs' => 'create false'
+            ], 500);
+        }
+    }
+
 }
