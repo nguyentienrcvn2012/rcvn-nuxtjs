@@ -48,3 +48,10 @@ Route::group(['prefix' => '/api/v1/user-create'], function () {
 Route::group(['prefix' => '/api/v1/customer-create'], function () {
     Route::post('/create', 'Api\V1\CustomerController@create')->name('customer.create')->middleware('auth:api');
 });
+Route::group(['prefix' => '/api/v1/product'], function () {
+    Route::get('/', 'Api\V1\ProductController@index')->middleware('auth:api');
+    Route::post('/{id}', 'Api\V1\ProductController@getById')->middleware('auth:api');
+    Route::post('/edit/{id}', 'Api\V1\ProductController@update')->middleware('auth:api');
+    Route::post('/delete/{id}', 'Api\V1\ProductController@deleteById')->middleware('auth:api');
+    Route::post('/create', 'Api\V1\ProductController@create')->middleware('auth:api');
+});
