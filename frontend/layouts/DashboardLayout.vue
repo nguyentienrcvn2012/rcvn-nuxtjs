@@ -30,7 +30,7 @@
         <sidebar-item
           :link="{
             name: 'Product',
-            icon: 'ni ni-single-02',
+            icon: 'ni ni-shop',
             path: '/product',
           }"
         >

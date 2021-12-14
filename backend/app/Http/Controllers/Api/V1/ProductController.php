@@ -6,9 +6,13 @@ use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Product;
+use App\Models\Category;
 use App\Http\Resources\ProductResource;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\Auth\ProductRequest;
+use App\Http\Requests\Api\V1\Auth\ProductCreateRequest;
+use App\Http\Requests\Api\V1\Auth\ProductUpdateRequest;
+use App\Http\Resources\CategoryResource;
+
 class ProductController extends Controller
 {
     /**
@@ -41,7 +45,7 @@ class ProductController extends Controller
         }
     }
 
-    public function update(ProductRequest $request){
+    public function update(ProductUpdateRequest $request){
         $params = $request->all();
         if (empty($params['id']) ) {
             return response()->json([
@@ -52,10 +56,12 @@ class ProductController extends Controller
         try {
             $product = Product::where('id', $params['id'])->get();
             if (!empty($product)) {
-                Product::where('id',$params['id'])->update([
+                $flag = Product::where('id',$params['id'])->update([
                     'productName' => $params['productName'],
                     'categoryId' => $params['categoryId'],
-                    'price' => $params['price']
+                    'price' => $params['price'],
+                    'inventory' => $params['inventory'],
+                    'description' => $params['description']
                 ]);
                 return response()->json([
                     'status' => true,
@@ -97,11 +103,12 @@ class ProductController extends Controller
         }
     }
 
-    public function create(ProductRequest $request){
+    public function create(ProductCreateRequest $request){
         try {
             $params = $request->all();
                 Product::create([
                     'productName' => $params['productName'] ,
+                    'description' => $params['description'],
                     'categoryId' => $params['categoryId'],
                     'price' => $params['price'],
                     'inventory' => $params['inventory']
@@ -116,6 +123,10 @@ class ProductController extends Controller
                 'mgs' => 'create false'
             ], 500);
         }
+    }
+    public function getCategory(){
+        $data  = Category::get();
+        return  CategoryResource::collection($data);
     }
 
 }

@@ -1,5 +1,7 @@
 <template>
+
   <div class="container-fluid mt-5">
+    <nuxt-link :to="{name: 'product-create'}" type="button" class="btn btn-success">Create</nuxt-link>
     <table class="table table-striped">
         <thead>
             <tr>
@@ -14,15 +16,14 @@
         <tbody>
             <tr v-for="product in products" :key="product.id">
                 <th scope="row">{{product.id}}</th>
-                <td>{{products.productName}}</td>
+                <td>{{product.productName}}</td>
                 <td>{{product.categoryId}}</td>
                 <td>{{product.price}}</td>
                 <td>{{product.description}}</td>
                  <td>{{product.inventory}}</td>
                 <td>
-                    <nuxt-link :to="{name: 'customer-management-id', params: {id: product.id}}" type="button" class="btn btn-primary">Edit</nuxt-link>
+                    <nuxt-link :to="{name: 'product-id', params: {id: product.id}}" type="button" class="btn btn-primary">Edit</nuxt-link>
                     <button @click="deletePost(product.id)" type="button" class="btn btn-secondary">Delete</button>
-                    <nuxt-link :to="{name: 'customer-management-create', params: {id: productproduct.id}}" type="button" class="btn btn-success">Create</nuxt-link>
                 </td>
             </tr>
         </tbody>

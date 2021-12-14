@@ -20,7 +20,6 @@
                 <td>
                     <nuxt-link :to="{name: 'customer-management-id', params: {id: customer.id}}" type="button" class="btn btn-primary">Edit</nuxt-link>
                     <button @click="deletePost(customer.id)" type="button" class="btn btn-secondary">Delete</button>
-                    <nuxt-link :to="{name: 'customer-management-create', params: {id: customer.id}}" type="button" class="btn btn-success">Create</nuxt-link>
                 </td>
             </tr>
         </tbody>

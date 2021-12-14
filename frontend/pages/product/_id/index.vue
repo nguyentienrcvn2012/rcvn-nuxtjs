@@ -1,25 +1,38 @@
 <template>
   <div class="container">
     <div class=" mt-5 mb-5" style="padding:20px;">
-        <h3 class="display-3">Update User {{data[0].name}}</h3>
+        <!-- <h3 class="display-3">Update  {{data[0].productName}}</h3> -->
         <hr>
         <div class="ml-5 content">
             <form @submit.prevent="update">
             <div class="form-group">
-                <label>Name</label>
-                <input v-model="data[0].name" type="name" class="form-control" autofocus  >
+                <label>Product Name</label>
+                <input v-model="data[0].productName" type="name" class="form-control" autofocus  >
             </div>
             <div class="form-group">
-                <label>Email address</label>
-                <input v-model.trim="data[0].email" type="name" class="form-control" autofocus>
+                <label>Category</label>
+                 <el-select class="select-danger"
+                  placeholder="Single Select"
+                          v-model="selects.simple">
+              <el-option v-for="option in selects.category"
+                        class="select-danger"
+                        :value="data[0].cateogry"
+                        :label="option.categoryName"
+                        :key="option.id">
+              </el-option>
+            </el-select>
             </div>
             <div class="form-group">
-                <label>phone number</label>
-                <input v-model.trim="data[0].phone" type="name" class="form-control" autofocus>
+                <label>Price</label>
+                <input v-model.trim="data[0].price" type="name" class="form-control" autofocus>
             </div>
             <div class="form-group">
-                <label>address address</label>
-                <input v-model.trim="data[0].address" type="name" class="form-control" autofocus>
+                <label>description</label>
+                <input v-model.trim="data[0].description" type="name" class="form-control" autofocus>
+            </div>
+            <div class="form-group">
+                <label>Inventory</label>
+                <input v-model.trim="data[0].inventory" type="name" class="form-control" autofocus>
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
             </form>
@@ -56,21 +69,25 @@ export default {
       [Option.name]: Option,
       [Button.name]: Button,
     },
-    // validate({ params }){
-    //     console.log('xxx',params)
-    //     return true
-    // },
     data() {
         return {
+          selects:{},
             data: [
             ]
-            }
+      }
     },
     async asyncData({ $axios, params }) {
-      const { data } = await $axios.$post(`/customer/${params.id}`, {id:params.id})
+      const { data } = await $axios.$post(`/product/${params.id}`, {id:params.id})
+      const { selectData } = await $axios.$get('/product/category')
+      console.log(selectData);
       return {
-        data: data
+        data: data,
+        selects: {
+              simple: '',
+              category : selectData
+            }
       }
+
     },
   methods: {
     // async create() {
@@ -79,15 +96,16 @@ export default {
     // },
     
         async update() {
-            await this.$axios.$post(`/customer/edit/${this.$route.params.id}`, {
+            await this.$axios.$post(`/product/edit/${this.$route.params.id}`, {
                 id: this.$route.params.id,
-                name: this.data[0].name,
-                email: this.data[0].email,
-                phone: this.data[0].phone,
-                address: this.data[0].address,
+                productName: this.data[0].productName,
+                categoryId: this.data[0].categoryId,
+                price: this.data[0].price,
+                description: this.data[0].description,
+                inventory: this.data[0].inventory,
             })
             // redirect
-            this.$router.push('/customer-management')
+            this.$router.push('/product')
         }
   }
 }

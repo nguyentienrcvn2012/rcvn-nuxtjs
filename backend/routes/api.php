@@ -54,4 +54,6 @@ Route::group(['prefix' => '/api/v1/product'], function () {
     Route::post('/edit/{id}', 'Api\V1\ProductController@update')->middleware('auth:api');
     Route::post('/delete/{id}', 'Api\V1\ProductController@deleteById')->middleware('auth:api');
     Route::post('/create', 'Api\V1\ProductController@create')->middleware('auth:api');
+    Route::get('/category', 'Api\V1\ProductController@getCategory')->middleware('auth:api');
+    
 });

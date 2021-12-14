@@ -6,20 +6,34 @@
         <div class="ml-5 content">
             <form v-on:submit.prevent="create">
             <div class="form-group">
-                <label>Name value</label>
-                <input v-model="data.name" name="name" type="name" class="form-control" autofocus  >
+                <label>Product Name</label>
+                <input v-model="data.productName" name="productName" type="name" class="form-control" autofocus  >
             </div>
             <div class="form-group">
-                <label>Email address</label>
-                <input v-model.trim="data.email" name="name" type="email" class="form-control" autofocus>
+                <label>categoryId</label>
+                <!-- <input v-model.trim="data.categoryId" name="categoryId" type="name" class="form-control" autofocus> -->
+                <el-select class="select-danger"
+                  placeholder="Single Select"
+                          v-model="selects.simple">
+              <el-option v-for="option in selects.languages"
+                        class="select-danger"
+                        :value="option.value"
+                        :label="option.label"
+                        :key="option.label">
+              </el-option>
+            </el-select>
             </div>
             <div class="form-group">
-                <label>phone number</label>
-                <input v-model.trim="data.phone" name="name" type="phone" class="form-control" autofocus>
+                <label>Price</label>
+                <input v-model.trim="data.price" name="price" type="number" class="form-control" autofocus>
             </div>
             <div class="form-group">
-                <label>address </label>
-                <input v-model.trim="data.address" name="address" type="name" class="form-control" autofocus>
+                <label>Description </label>
+                <input v-model.trim="data.description" name="description" type="text" class="form-control" autofocus>
+            </div>
+            <div class="form-group">
+                <label>Inventory </label>
+                <input v-model.trim="data.inventory" name="inventory" type="number" class="form-control" autofocus>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
             </form>
@@ -61,16 +75,17 @@ export default {
         return {
             data: 
               {
-                name : '',
-                email  : '',
-                phone  : '',
-                address : ''
+                productName : '',
+                categoryId  : '',
+                price  : '',
+                description : '',
+                inventory : ''
               }
             }
     },
   methods: {
     async create() {
-      await this.$axios.$post("/customer-create/create", this.data)
+      await this.$axios.$post("/product/create", this.data)
       await this.$router.go()
     },
     

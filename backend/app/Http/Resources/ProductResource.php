@@ -1,7 +1,6 @@
 <?php
 namespace App\Http\Resources;
 
-use App\Http\Resources\Post as PostResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductResource extends JsonResource {
@@ -14,6 +13,7 @@ class ProductResource extends JsonResource {
 			'price' => $this->price,
 			'inventory' => $this->inventory,
 			'updated_at' => $this->updated_at,
+			'description' => $this->description,	
 		];
 	}
 }
