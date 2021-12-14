@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->truncate();
         Schema::enableForeignKeyConstraints();
 
-        $this->call(UsersSeeder::class);
+        // $this->call(UsersSeeder::class);
+        $this->call(CustomerTableSeeder::class);
     }
 }
