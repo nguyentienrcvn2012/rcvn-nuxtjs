@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        DB::table('users')->truncate();
+        DB::table('customers')->truncate();
         Schema::enableForeignKeyConstraints();
 
         // $this->call(UsersSeeder::class);
