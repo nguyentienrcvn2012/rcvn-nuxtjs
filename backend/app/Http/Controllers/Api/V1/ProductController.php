@@ -5,16 +5,10 @@ namespace App\Http\Controllers\Api\V1;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use GuzzleHttp\Exception\ClientException;
-use CloudCreativity\LaravelJsonApi\Document\Error\Error;
-use CloudCreativity\LaravelJsonApi\Http\Controllers\JsonApiController;
-use App\Models\Customer;
-use App\Http\Resources\CustomerResource;
+use App\Models\Product;
+use App\Http\Resources\ProductResource;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Api\V1\Auth\CustomerRequest;
-use App\Http\Requests\Api\V1\Auth\CustomerByIdRequest;
-use App\Http\Requests\Api\V1\Auth\CustomerCreateRequest;
-use App\Http\Requests\Api\V1\Auth\Test;
+use App\Http\Requests\Api\V1\Auth\ProductRequest;
 class ProductController extends Controller
 {
     /**
@@ -23,19 +17,22 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $data = Customer::get();
-		return CustomerResource::collection($data);
+        $data = Product::get();
+		return ProductResource::collection($data);
         
     }
 
-    public function getById(CustomerByIdRequest $request){
-        try {
-            $params = $request->all();
-            if (isset($params['id']) ) {
-                $data = Customer::where('id', $params['id'])->get();
-                return CustomerResource::collection($data);
-            }
-            
+    public function getById(Request $request){
+        $params = $request->all();
+        if (empty($params['id']) ) {
+            return response()->json([
+                'status' => false,
+                'mgs' =>'Param id is required'
+            ], 301);
+        }
+        try {   
+            $data = Product::where('id', $params['id'])->get();
+            return ProductResource::collection($data);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -44,29 +41,27 @@ class ProductController extends Controller
         }
     }
 
-    public function update(CustomerRequest $request){
+    public function update(ProductRequest $request){
+        $params = $request->all();
+        if (empty($params['id']) ) {
+            return response()->json([
+                'status' => false,
+                'mgs' =>'Param id is required'
+            ], 301);
+        }
         try {
-            $params = $request->all();
-            if (isset($params['id']) ) {
-                $customer = Customer::where('id', $params['id'])->get();
-                if (!empty($customer)) {
-                    Customer::where('id',$params['id'])->update([
-                        'name' => $params['name'],
-                        'email' => $params['email'],
-                        'phone' => $params['phone'],
-                        'address' => $params['address']
-                    ]);
-                    return response()->json([
-                        'status' => true,
-                        'mgs' => 'update success!'
-                    ], 200);
-                }
-
+            $product = Product::where('id', $params['id'])->get();
+            if (!empty($product)) {
+                Product::where('id',$params['id'])->update([
+                    'productName' => $params['productName'],
+                    'categoryId' => $params['categoryId'],
+                    'price' => $params['price']
+                ]);
                 return response()->json([
-                    'status' => false,
-                    'mgs' => 'update false!'
+                    'status' => true,
+                    'mgs' => 'update success!'
                 ], 200);
-            }                                           
+            }                                   
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,
@@ -74,11 +69,17 @@ class ProductController extends Controller
             ], 500);
         }
     }
-    public function deleteById(CustomerByIdRequest $request){
+    public function deleteById(Request $request){
+        $params = $request->all();
+        if (empty($params['id']) ) {
+            return response()->json([
+                'status' => false,
+                'mgs' =>'Param id is required'
+            ], 301);
+        }
         try {
-            $params = $request->all();
             if (isset($params['id']) ) {
-                $customer = Customer::where('id', $params['id'])->delete();
+                $product = Product::where('id', $params['id'])->delete();
                 return response()->json([
                     'status' => true,
                     'mgs' => 'delete success!'
@@ -96,26 +97,19 @@ class ProductController extends Controller
         }
     }
 
-    public function create(CustomerCreateRequest $request){
+    public function create(ProductRequest $request){
         try {
             $params = $request->all();
-            if (!empty($params)) {
-                Customer::create([
-                    'name' => $params['name'] ,
-                    'email' => $params['email'],
-                    'phone' => $params['phone'],
-                    'address' => $params['address']
+                Product::create([
+                    'productName' => $params['productName'] ,
+                    'categoryId' => $params['categoryId'],
+                    'price' => $params['price'],
+                    'inventory' => $params['inventory']
                 ]);
                 return response()->json([
                     'status' => true,
                     'mgs' => 'create success!'
                 ], 200);
-            }
-
-            return response()->json([
-                'status' => false,
-                'mgs' => 'create false!'
-            ], 200);
         } catch (\Throwable $th) {
             return response()->json([
                 'status' => false,

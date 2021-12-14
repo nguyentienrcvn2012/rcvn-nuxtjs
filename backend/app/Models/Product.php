@@ -12,14 +12,14 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
-    protected $table = 'customers';
+    protected $table = 'products';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password'
+        'productName', 'categoryId', 'price'
     ];
 
     
