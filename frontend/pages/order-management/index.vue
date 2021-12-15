@@ -6,24 +6,23 @@
             <tr>
             <th scope="col">#</th>
             <th scope="col">Product Name</th>
-            <th scope="col">Category</th>
-            <th scope="col">Price</th>
-            <th scope="col">Description</th>
-            <th scope="col">Inventory</th>
+            <th scope="col">Customer Name</th>
+            <th scope="col">Quantily</th>
+            <th scope="col">Total Price</th>
+            <th scope="col">Status</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="product in products" :key="product.id">
-                <th scope="row">{{product.id}}</th>
-                <td>{{product.productName}}</td>
-                <td>{{product.categoryId}}</td>
-                <td>{{product.price}}</td>
-                <td>{{product.description}}</td>
-                 <td>{{product.inventory}}</td>
+            <tr v-for="order in orders" :key="order.id">
+                <th scope="row">{{order.id}}</th>
+                <td>{{order.productId}}</td>
+                <td>{{order.customerId}}</td>
+                <td>{{order.quantily}}</td>
+                <td>{{order.totalPrice}}</td>
+                 <td>{{order.status}}</td>
                 <td>
-                    <nuxt-link :to="{name: 'product-id', params: {id: product.id}}" type="button" class="btn btn-primary">Edit</nuxt-link>
-                    <button @click="deletePost(product.id)" type="button" class="btn btn-secondary">Delete</button>
-                    <nuxt-link :to="{name: 'product-create', params: {id: product.id}}" type="button" class="btn btn-success">Create</nuxt-link>
+                    <nuxt-link :to="{name: 'order-management-id', params: {id: order.id}}" type="button" class="btn btn-primary">Edit</nuxt-link>
+                    <button @click="deletePost(order.id)" type="button" class="btn btn-secondary">Delete</button>
                 </td>
             </tr>
         </tbody>
@@ -61,17 +60,17 @@ export default {
   },
     data() {
         return {
-            products: [],
+            orders: [],
             links: []
         }
     },
     async asyncData({$axios, params}) {
-        const {data} = await $axios.$get(`/product`)
-        return {products: data}
+        const {data} = await $axios.$get(`/order`)
+        return {orders: data}
     },
     methods: {
         async deletePost(id) {
-          await this.$axios.$post(`/product/delete/${this.$route.params.id}`, {id:id})
+          await this.$axios.$post(`/order/delete/${this.$route.params.id}`, {id:id})
           // redirect
           await this.$nuxt.refresh()
       }

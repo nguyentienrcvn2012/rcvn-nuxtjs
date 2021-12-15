@@ -5,14 +5,6 @@
       <template slot-scope="props" slot="links">
         <sidebar-item
           :link="{
-            name: 'Dashboard',
-            icon: 'ni ni-shop text-primary',
-            path: '/dashboard',
-          }"
-        >
-        </sidebar-item>
-        <sidebar-item
-          :link="{
             name: 'User Management',
             icon: 'ni ni-single-02',
             path: '/user-management',
@@ -40,30 +32,6 @@
             name: 'Order Management',
             icon: 'ni ni-cart',
             path: '/order-management',
-          }"
-        >
-        </sidebar-item>
-        <sidebar-item
-          :link="{
-            name: 'Icons',
-            path: '/components/icons',
-            icon: 'ni ni-planet',
-          }"
-        />
-        <sidebar-item
-          :link="{
-            name: 'Tables',
-            icon: 'ni ni-align-left-2 text-default',
-            path: '/tables/regular',
-          }"
-        >
-        </sidebar-item>
-
-        <sidebar-item
-          :link="{
-            name: 'Google',
-            icon: 'ni ni-pin-3',
-            path: '/maps/google',
           }"
         >
         </sidebar-item>

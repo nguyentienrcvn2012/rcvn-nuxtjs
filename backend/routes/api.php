@@ -57,3 +57,9 @@ Route::group(['prefix' => '/api/v1/product'], function () {
     Route::get('/category', 'Api\V1\ProductController@getCategory')->middleware('auth:api');
     
 });
+Route::group(['prefix' => '/api/v1/order'], function () {
+    Route::get('/', 'Api\V1\OrderController@index')->middleware('auth:api');
+    Route::post('/{id}', 'Api\V1\OrderController@getById')->middleware('auth:api');
+    Route::post('/edit/{id}', 'Api\V1\OrderController@update')->middleware('auth:api');
+    Route::post('/delete/{id}', 'Api\V1\OrderController@deleteById')->middleware('auth:api');   
+});
