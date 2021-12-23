@@ -42,7 +42,6 @@ class Order extends Model
     }
     public function getCustomerNameAttribute()
     {
-        \Log::info($this->customer);
         return $this->customer->name;
     }
 

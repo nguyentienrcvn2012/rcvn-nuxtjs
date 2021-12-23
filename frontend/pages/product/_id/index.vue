@@ -1,7 +1,6 @@
 <template>
   <div class="container">
     <div class=" mt-5 mb-5" style="padding:20px;">
-        <!-- <h3 class="display-3">Update  {{data[0].productName}}</h3> -->
         <hr>
         <div class="ml-5 content">
             <form @submit.prevent="update">
@@ -13,12 +12,12 @@
                 <label>Category</label>
                  <el-select class="select-danger"
                   placeholder="Single Select"
-                          v-model="selects.simple">
-              <el-option v-for="option in selects.category"
+                  v-model="data[0].category"      >
+              <el-option v-for="option in selects.data"
                         class="select-danger"
-                        :value="data[0].cateogry"
-                        :label="option.categoryName"
-                        :key="option.id">
+                        :value="option.value"
+                        :label="option.label"
+                        :key="option.value">
               </el-option>
             </el-select>
             </div>
@@ -28,7 +27,7 @@
             </div>
             <div class="form-group">
                 <label>description</label>
-                <input v-model.trim="data[0].description" type="name" class="form-control" autofocus>
+                 <textarea class="form-control" id="exampleFormControlTextarea1" type="name" rows="3" placeholder="Write a large text here ..." v-model.trim="data[0].description"></textarea>
             </div>
             <div class="form-group">
                 <label>Inventory</label>
@@ -71,21 +70,25 @@ export default {
     },
     data() {
         return {
-          selects:{},
             data: [
-            ]
+            ],
+            selects:{
+              simple :'',
+              data: [] 
+            },
       }
     },
     async asyncData({ $axios, params }) {
       const { data } = await $axios.$post(`/product/${params.id}`, {id:params.id})
-      const { selectData } = await $axios.$get('/product/category')
-      console.log(selectData);
+     const  selectData  = await $axios.$get(`/product/category`)
+     console.log(data);
+     console.log(selectData);
       return {
         data: data,
-        selects: {
-              simple: '',
-              category : selectData
-            }
+         selects:{
+              simple :'',
+              data: selectData.data
+            },
       }
 
     },

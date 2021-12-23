@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Order;
 use App\Http\Resources\ProductResource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Auth\ProductCreateRequest;
@@ -56,13 +57,8 @@ class ProductController extends Controller
         try {
             $product = Product::where('id', $params['id'])->get();
             if (!empty($product)) {
-                $flag = Product::where('id',$params['id'])->update([
-                    'productName' => $params['productName'],
-                    'categoryId' => $params['categoryId'],
-                    'price' => $params['price'],
-                    'inventory' => $params['inventory'],
-                    'description' => $params['description']
-                ]);
+                \Log::info($params);
+                $flag = Product::where('id',$params['id'])->update($params);
                 return response()->json([
                     'status' => true,
                     'mgs' => 'update success!'
@@ -85,6 +81,13 @@ class ProductController extends Controller
         }
         try {
             if (isset($params['id']) ) {
+                $order = Order::where('productId', $params['id'])->where('status',1)->get();
+                if(!empty($order)){
+                    return response()->json([
+                        'status' => false,
+                        'mgs' => 'Product is Processing'
+                    ], 200);
+                }
                 $product = Product::where('id', $params['id'])->delete();
                 return response()->json([
                     'status' => true,
@@ -126,6 +129,7 @@ class ProductController extends Controller
     }
     public function getCategory(){
         $data  = Category::get();
+        \Log::info($data);
         return  CategoryResource::collection($data);
     }
 

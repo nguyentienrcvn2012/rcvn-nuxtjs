@@ -16,14 +16,14 @@
             <tr v-for="product in products" :key="product.id">
                 <th scope="row">{{product.id}}</th>
                 <td>{{product.productName}}</td>
-                <td>{{product.categoryId}}</td>
+                <td>{{product.category}}</td>
                 <td>{{product.price}}</td>
                 <td>{{product.description}}</td>
                  <td>{{product.inventory}}</td>
                 <td>
                     <nuxt-link :to="{name: 'product-id', params: {id: product.id}}" type="button" class="btn btn-primary">Edit</nuxt-link>
                     <button @click="deletePost(product.id)" type="button" class="btn btn-secondary">Delete</button>
-                    <nuxt-link :to="{name: 'product-create', params: {id: product.id}}" type="button" class="btn btn-success">Create</nuxt-link>
+                    <button @click="createOrder(product.id)" type="button" class="btn btn-secondary">Create Order</button>
                 </td>
             </tr>
         </tbody>
@@ -74,7 +74,13 @@ export default {
           await this.$axios.$post(`/product/delete/${this.$route.params.id}`, {id:id})
           // redirect
           await this.$nuxt.refresh()
-      }
+      },
+    async createOrder(id) {
+console.log(id);
+      await this.$axios.$post(`/order/create-order/${this.$route.params.id}`, {id:id})
+      await this.$nuxt.refresh()
+    },
+    
     }
 };
 </script>

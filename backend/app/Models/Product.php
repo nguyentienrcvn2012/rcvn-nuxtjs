@@ -13,7 +13,9 @@ class Product extends Model
     protected $fillable = [
         'productName', 'categoryId', 'price','description','inventory','updated_at','imageUrl'
     ];
-
+    public function category() {
+        return $this->hasOne('App\Models\Category', 'id', 'categoryId');
+    }
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -34,12 +36,12 @@ class Product extends Model
      * @param $name
      * @return mixed
      */
-    public function scopeCategoryName($query, $categoryId)
+
+    public function getCategoryNameAttribute()
     {
-        return $query->join('category', 'category.id', '=', 'products.categoryId')->select('categoryName')->get();
+        return $this->category->categoryName;
 
     }
-
     /**
      * @param $query
      * @param $email
