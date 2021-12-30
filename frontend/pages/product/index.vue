@@ -23,7 +23,8 @@
                 <td>
                     <nuxt-link :to="{name: 'product-id', params: {id: product.id}}" type="button" class="btn btn-primary">Edit</nuxt-link>
                     <button @click="deletePost(product.id)" type="button" class="btn btn-secondary">Delete</button>
-                    <button @click="createOrder(product.id)" type="button" class="btn btn-secondary">Create Order</button>
+                    <!-- <button @click="createOrder(product.id)" type="button" class="btn btn-secondary">Create Order</button> -->
+                     <nuxt-link :to="{name: 'order-management-create', params: {id: product.id}}" type="button" class="btn btn-success">Create</nuxt-link>
                 </td>
             </tr>
         </tbody>
@@ -76,8 +77,7 @@ export default {
           await this.$nuxt.refresh()
       },
     async createOrder(id) {
-console.log(id);
-      await this.$axios.$post(`/order/create-order/${this.$route.params.id}`, {id:id})
+      await this.$axios.$get(`/order/create-order/${this.$route.params.id}`, {id:id})
       await this.$nuxt.refresh()
     },
     

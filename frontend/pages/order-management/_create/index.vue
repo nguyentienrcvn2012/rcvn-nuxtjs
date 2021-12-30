@@ -7,25 +7,25 @@
             <form @submit.prevent="update">
             <div class="form-group">
                 <label>Product Name</label>
-               <input v-model="data[0].productId" type="name" class="form-control" readonly  >
+               <input type="name" class="form-control"   >
             </div>
             <div class="form-group">
                 <label>Custome Name</label>
-                   <input v-model="data[0].customerId" type="name" class="form-control" readonly  >
+                   <input  type="name" class="form-control"   >
             </div>
             <div class="form-group">
                 <label>Quantily</label>
-                <input v-model.trim="data[0].quantily" type="name" class="form-control" readonly>
+                <input  type="name" class="form-control" >
             </div>
             <div class="form-group">
                 <label>Price</label>
-                <input v-model.trim="data[0].totalPrice" type="name" class="form-control" readonly>
+                <input  type="name" class="form-control" >
             </div>
             <div class="form-group">
                 <label>Status</label>
-                <input v-model.trim="data[0].status" type="name" class="form-control" readonly>
+                <input type="name" class="form-control" >
             </div>
-            <button v-if="data[0].status ==='proccessing'" type="submit" class="btn btn-primary">Update</button>
+            <button type="submit" class="btn btn-primary">Create</button>
             </form>
         </div>
     </div>
@@ -75,7 +75,7 @@ export default {
     },
   methods: {
     async create() {
-      await this.$axios.$post("/product/create", this.data)
+      await this.$axios.$post("/order/create-order", this.data)
       await this.$router.go()
     },
     
