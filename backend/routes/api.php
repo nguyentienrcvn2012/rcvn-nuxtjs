@@ -62,5 +62,5 @@ Route::group(['prefix' => '/api/v1/order'], function () {
     Route::post('/{id}', 'Api\V1\OrderController@getById')->middleware('auth:api');
     Route::post('/edit/{id}', 'Api\V1\OrderController@update')->middleware('auth:api');
     Route::post('/delete/{id}', 'Api\V1\OrderController@deleteById')->middleware('auth:api');   
-    Route::post('/create-order/{id}', 'Api\V1\OrderController@createOrder')->middleware('auth:api');
+    Route::post('/create-order', 'Api\V1\OrderController@createOrder')->middleware('auth:api');
 });

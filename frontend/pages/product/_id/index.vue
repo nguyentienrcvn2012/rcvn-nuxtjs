@@ -81,8 +81,6 @@ export default {
     async asyncData({ $axios, params }) {
       const { data } = await $axios.$post(`/product/${params.id}`, {id:params.id})
      const  selectData  = await $axios.$get(`/product/category`)
-     console.log(data);
-     console.log(selectData);
       return {
         data: data,
          selects:{

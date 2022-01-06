@@ -1,29 +1,35 @@
 <template>
   <div class="container">
     <div class=" mt-5 mb-5" style="padding:20px;">
-        <h3 class="display-3">Update  {{data[0].productId}}</h3>
+        <h3 class="display-3">Update </h3>
         <hr>
         <div class="ml-5 content">
-            <form @submit.prevent="update">
+            <form @submit.prevent="create">
+            <input type="hidden" name="productId" class="form-control" :value="data[0].id">
             <div class="form-group">
                 <label>Product Name</label>
-               <input type="name" class="form-control"   >
+               <input v-model="data[0].productName" type="name" class="form-control" readonly  >
             </div>
             <div class="form-group">
-                <label>Custome Name</label>
-                   <input  type="name" class="form-control"   >
+                <label>Category</label>
+                 <el-select class="select-danger"
+                  placeholder="Single Select"
+                  v-model="data[0].category"  readonly     >
+              <el-option v-for="option in selects.data"
+                        class="select-danger"
+                        :value="option.value"
+                        :label="option.label"
+                        :key="option.value">
+              </el-option>
+            </el-select>
             </div>
             <div class="form-group">
                 <label>Quantily</label>
-                <input  type="name" class="form-control" >
+                <input v-model="data[0].quantily"  type="name" class="form-control"  >
             </div>
             <div class="form-group">
                 <label>Price</label>
-                <input  type="name" class="form-control" >
-            </div>
-            <div class="form-group">
-                <label>Status</label>
-                <input type="name" class="form-control" >
+                <input v-model.trim="data[0].price" type="name" class="form-control" readonly>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
             </form>
@@ -63,18 +69,30 @@ export default {
     
     data() {
         return {
-            data: 
-              {
-                productId : '',
-                categoryId  : '',
-                price  : '',
-                description : '',
-                inventory : ''
-              }
+           data: [
+            ],
+            selects:{
+              simple :'',
+              data: [] 
+            },
+  
             }
+    },
+    async asyncData({ $axios, params }) {
+      const { data } = await $axios.$post(`/product/${params.id}`, {id:params.id})
+     const  selectData  = await $axios.$get(`/product/category`)
+      return {
+        data: data,
+         selects:{
+              simple :'',
+              data: selectData.data
+            },
+      }
+
     },
   methods: {
     async create() {
+      console.log(this.data);
       await this.$axios.$post("/order/create-order", this.data)
       await this.$router.go()
     },

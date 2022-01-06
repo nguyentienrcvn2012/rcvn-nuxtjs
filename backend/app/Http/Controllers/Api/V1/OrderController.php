@@ -99,16 +99,18 @@ class OrderController extends Controller
             ], 500);
         }
     }
-    public function createOrder(Request $request){
+    public function createOrder(OrderRequest $request){
+        \Log::info('22222');
         $params = $request->all();
-       \Log::info( auth()->id());
+    //    \Log::info(auth()->user());
+       \Log::info($params);
         // try {
-            if (empty($params['id']) ) {
-                return response()->json([
-                    'status' => false,
-                    'mgs' =>'Param id is required'
-                ], 301);
-            }
+            // if (empty($params['id']) ) {
+            //     return response()->json([
+            //         'status' => false,
+            //         'mgs' =>'Param id is required'
+            //     ], 301);
+            // }
             $data = Product::where('id', $params['id'])->first();
            
             if (empty($data) ) {

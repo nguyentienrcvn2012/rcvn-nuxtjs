@@ -76,10 +76,10 @@ export default {
           // redirect
           await this.$nuxt.refresh()
       },
-    async createOrder(id) {
-      await this.$axios.$get(`/order/create-order/${this.$route.params.id}`, {id:id})
-      await this.$nuxt.refresh()
-    },
+    // async createOrder(id) {
+    //   await this.$axios.$get(`/order/create-order/${this.$route.params.id}`, {id:id})
+    //   await this.$nuxt.refresh()
+    // },
     
     }
 };
